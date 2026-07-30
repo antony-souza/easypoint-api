@@ -1,1 +1,1 @@
-# easypoint-backend
+# easypoint-api
