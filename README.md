@@ -1,64 +1,87 @@
 # EasyPoint API
 
-Backend central da plataforma **EasyPoint — Ponto Fácil**, responsável por fornecer a API que integra o sistema de PDV e o painel administrativo.
+Backend central do EasyPoint, responsável pelas regras de negócio, persistência dos dados, autenticação, sincronização e comunicação entre os PDVs e o painel administrativo.
 
-## 🎯 Propósito
+## Responsabilidade
 
-O `easypoint-api` centraliza as regras de negócio e o gerenciamento das informações da plataforma.
+A API é o **núcleo central do sistema** e a principal autoridade sobre os dados.
 
 É responsável por:
 
-* Gerenciamento de produtos e preços
-* Controle de estoque
-* Registro e gerenciamento de vendas
-* Gerenciamento de caixas
-* Usuários e permissões
+* Regras de negócio
 * Autenticação e autorização
-* Comunicação com o banco de dados
-* Validação das operações realizadas pelo PDV e pelo painel administrativo
+* Produtos
+* Preços
+* Estoque
+* Lotes
+* Vendas
+* Pagamentos
+* Lojas
+* Caixas
+* Usuários
+* Relatórios e consultas
+* Sincronização dos PDVs
+* Processamento de eventos
+* Comunicação em tempo real
+* Integração com serviços externos
 
-## 🏗️ Arquitetura
+O painel administrativo e os PDVs não acessam diretamente o banco PostgreSQL. Toda comunicação com o banco central passa pela API.
+
+## Arquitetura
 
 ```text
-                    EasyPoint API
-                         │
-          ┌──────────────┴──────────────┐
-          │                             │
-          ▼                             ▼
-    EasyPoint PDV                 EasyPoint Admin
-       WPF / C#                   React / TypeScript
-          │                             │
-          └──────────────┬──────────────┘
-                         │
-                      HTTP/HTTPS
-                         │
-                         ▼
-                  EasyPoint API
-                         │
-                         ▼
-                    PostgreSQL
+EasyPoint Admin
+       │
+       │ HTTPS
+       ▼
+┌───────────────────┐
+│   EasyPoint API   │
+│    ASP.NET Core   │
+└─────────┬─────────┘
+          │
+       EF Core
+          │
+          ▼
+      PostgreSQL
 ```
 
-## 🛠️ Tecnologias
+Para eventos e sincronização:
 
-* C#
-* ASP.NET Core
-* Entity Framework Core
-* PostgreSQL
-* Docker
-* REST API
+```text
+API
+ │
+ ├── PostgreSQL
+ │
+ └── RabbitMQ
+       ↓
+    Consumer
+       ↓
+    SignalR
+       ↓
+      PDVs
+```
 
-## 📌 Responsabilidade
+## Sincronização
 
-O backend é a **fonte central da verdade** do EasyPoint.
+A API mantém o estado oficial dos dados.
 
-Clientes como o PDV e o painel administrativo não acessam diretamente o banco de dados. Todas as operações passam pela API.
+Quando uma informação é alterada, o backend pode registrar um evento de sincronização e notificar os PDVs conectados através do SignalR.
 
-## 🚧 Status
+PDVs que estavam offline podem verificar posteriormente quais alterações perderam e atualizar seus bancos SQLite.
 
-Em desenvolvimento.
+O sistema utiliza uma abordagem **offline-first no PDV e centralizada no backend**.
 
-## 🔗 Projetos relacionados
+## Stack
 
-* `easypoint-pdv` — aplicação desktop para operação do caixa
-* `easypoint-admin` — painel web para gerenciamento da plataforma
+* **C#**
+* **ASP.NET Core**
+* **Entity Framework Core**
+* **PostgreSQL**
+* **RabbitMQ**
+* **SignalR**
+* **REST API**
+* **Docker**
+
+## Princípio
+
+> **O PostgreSQL é a fonte oficial dos dados e a API é a autoridade central do sistema.**
