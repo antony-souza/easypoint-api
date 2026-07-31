@@ -7,4 +7,8 @@
     <ProjectReference Include="..\EasyPoint.Application\EasyPoint.Application.csproj" />
     <ProjectReference Include="..\EasyPoint.Infrastructure\EasyPoint.Infrastructure.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DotNetEnv" Version="3.2.0" />
+  </ItemGroup>
 </Project>
