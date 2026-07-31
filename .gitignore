@@ -1,0 +1,69 @@
+# Build
+[Bb]in/
+[Oo]bj/
+
+# Visual Studio
+.vs/
+*.user
+*.userosscache
+*.suo
+*.userprefs
+
+# Visual Studio Code
+.vscode/
+
+# Rider / JetBrains
+.idea/
+*.sln.iml
+
+# NuGet
+*.nupkg
+*.snupkg
+packages/
+.nuget/
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Logs
+*.log
+
+# Test results
+TestResults/
+*.trx
+
+# Coverage
+coverage/
+*.coverage
+*.coveragexml
+
+# Generated files
+GeneratedFiles/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Publish
+publish/
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# Local configuration
+appsettings.Local.json
+appsettings.Development.Local.json
+
+# User-specific files
+*.rsuser
+
+# SQL Server local database
+*.mdf
+*.ldf
+
+# Temporary files
+*.tmp
+*.temp
+*.cache
