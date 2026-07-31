@@ -29,6 +29,60 @@ O painel administrativo e os PDVs não acessam diretamente o banco PostgreSQL. T
 
 ## Arquitetura
 
+A base utiliza um **monólito modular com Clean Architecture**. O sistema continua
+sendo publicado como uma única API, enquanto as regras são separadas por módulos
+de negócio. Essa abordagem reduz a complexidade operacional no início e preserva
+fronteiras que poderão ser extraídas para serviços independentes no futuro.
+
+```text
+EasyPoint.Api
+    │
+    ├── EasyPoint.Application
+    │         │
+    │         └── EasyPoint.Domain
+    │
+    └── EasyPoint.Infrastructure
+              │
+              ├── EasyPoint.Application
+              └── EasyPoint.Domain
+```
+
+Regra principal de dependência:
+
+* `Domain` não depende de nenhum outro projeto.
+* `Application` depende somente de `Domain`.
+* `Infrastructure` implementa contratos definidos por `Application`.
+* `Api` é o ponto de entrada e a raiz de composição.
+
+Os módulos iniciais são `Catalog`, `Inventory`, `Sales`, `Payments`, `Stores`,
+`Identity`, `Synchronization` e `Reporting`.
+
+A descrição completa está em [docs/architecture.md](docs/architecture.md).
+
+## Estrutura
+
+```text
+easypoint-api/
+├── src/
+│   ├── EasyPoint.Api/
+│   ├── EasyPoint.Application/
+│   ├── EasyPoint.Domain/
+│   └── EasyPoint.Infrastructure/
+├── tests/
+│   ├── EasyPoint.UnitTests/
+│   ├── EasyPoint.IntegrationTests/
+│   └── EasyPoint.ArchitectureTests/
+├── deploy/
+├── docs/
+├── Directory.Build.props
+└── EasyPoint.slnx
+```
+
+O projeto está propositalmente sem entidades, casos de uso ou endpoints de
+exemplo. A estrutura inicial define apenas as fronteiras arquiteturais.
+
+## Aplicação
+
 ```text
 EasyPoint Admin
        │

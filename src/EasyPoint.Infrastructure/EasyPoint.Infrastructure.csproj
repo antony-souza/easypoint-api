@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <RootNamespace>EasyPoint.Infrastructure</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EasyPoint.Application\EasyPoint.Application.csproj" />
+    <ProjectReference Include="..\EasyPoint.Domain\EasyPoint.Domain.csproj" />
+  </ItemGroup>
+</Project>

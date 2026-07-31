@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <RootNamespace>EasyPoint.Api</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EasyPoint.Application\EasyPoint.Application.csproj" />
+    <ProjectReference Include="..\EasyPoint.Infrastructure\EasyPoint.Infrastructure.csproj" />
+  </ItemGroup>
+</Project>
