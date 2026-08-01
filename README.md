@@ -136,6 +136,30 @@ O sistema utiliza uma abordagem **offline-first no PDV e centralizada no backend
 * **REST API**
 * **Docker**
 
+## Infraestrutura local com Docker Compose
+
+O arquivo `docker-compose.yml` sobe as dependências usadas pela API:
+
+* PostgreSQL em `localhost:5432`
+* RabbitMQ em `localhost:5672`, com painel em <http://localhost:15672>
+* Redis em `localhost:6379`
+
+Para iniciar o ambiente de desenvolvimento:
+
+```powershell
+Copy-Item .env.example .env
+docker compose up -d
+docker compose ps
+```
+
+O arquivo `.env` é ignorado pelo Git. Edite-o para trocar credenciais ou
+portas sem alterar o Compose. Os dados ficam em volumes nomeados e continuam
+disponíveis após reiniciar os containers.
+
+Quando a API for executada dentro de um container, use `postgres`, `rabbitmq` e
+`redis` como hosts internos da rede Compose; o `.env.example` usa `localhost`
+porque a API, neste primeiro passo, roda diretamente no host.
+
 ## Princípio
 
 > **O PostgreSQL é a fonte oficial dos dados e a API é a autoridade central do sistema.**

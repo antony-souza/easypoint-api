@@ -1,0 +1,75 @@
+name: easypoint
+
+services:
+  postgres:
+    image: postgres:17.10-alpine
+    container_name: easypoint-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-easypoint}
+      POSTGRES_USER: ${POSTGRES_USER:-easypoint}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-easypoint_dev_password}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - easypoint_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - easypoint
+
+  rabbitmq:
+    image: rabbitmq:4.3.4-management-alpine
+    container_name: easypoint-rabbitmq
+    restart: unless-stopped
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-easypoint}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:-easypoint_dev_password}
+    ports:
+      - "${RABBITMQ_PORT:-5672}:5672"
+      - "${RABBITMQ_MANAGEMENT_PORT:-15672}:15672"
+    volumes:
+      - easypoint_rabbitmq_data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - easypoint
+
+  redis:
+    image: redis:8.8.1-alpine
+    container_name: easypoint-redis
+    restart: unless-stopped
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-easypoint_dev_password}
+    command:
+      - redis-server
+      - --appendonly
+      - "yes"
+      - --requirepass
+      - ${REDIS_PASSWORD:-easypoint_dev_password}
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - easypoint_redis_data:/data
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli -a \"$${REDIS_PASSWORD}\" ping | grep -q PONG"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - easypoint
+
+volumes:
+  easypoint_postgres_data:
+  easypoint_rabbitmq_data:
+  easypoint_redis_data:
+
+networks:
+  easypoint:
+    driver: bridge

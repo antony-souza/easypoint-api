@@ -3,30 +3,18 @@ using EasyPoint.Domain.Modules.Catalog.Entities;
 
 namespace EasyPoint.Application.Modules.Catalog.Products;
 
-public class ListAllProductsUseCase : IUseCase<Guid, List<Product>>
+public class ListAllProductsUseCase : IUseCase<Guid, Task<List<Product>>>
 {
-    //test
-    public List<Product> Handler(Guid id)
+    private readonly IProductRepository _productRepository;
+    
+    public ListAllProductsUseCase(IProductRepository productRepository)
     {
-        var products = new List<Product>
-        {
-            new Product
-            {
-                Id = id,
-                Name = "Product 1",
-                BarCode = 123456,
-                CategoryId = Guid.NewGuid(),
-                StoreId = Guid.NewGuid()
-            },
-            new Product
-            {
-                Id = Guid.NewGuid(),
-                Name = "Product 2",
-                BarCode = 789012,
-                CategoryId = Guid.NewGuid(),
-                StoreId = Guid.NewGuid()
-            }
-        };
+        _productRepository = productRepository;
+    }
+
+    public async Task<List<Product>> Handler(Guid storeId)
+    {
+        var products = await _productRepository.GetAllProductsByStore(storeId);
 
         return products;
     }
