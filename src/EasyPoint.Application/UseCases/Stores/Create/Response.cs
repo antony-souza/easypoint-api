@@ -2,5 +2,6 @@
 
 public sealed record Response(
     Guid Id,
-    string Name
+    string Name,
+    string Cnpj
 );

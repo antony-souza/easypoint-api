@@ -15,6 +15,16 @@ public sealed class CategoryConfiguration : IEntityTypeConfiguration<Category>
         builder.Property(category => category.Id)
             .ValueGeneratedOnAdd();
 
+        builder.Property(category => category.CreatedAt)
+            .IsRequired()
+            .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+        builder.Property(category => category.UpdatedAt)
+            .IsRequired()
+            .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+        builder.HasQueryFilter(category => category.DeletedAt == null);
+
         builder.Property(category => category.Name)
             .IsRequired()
             .HasMaxLength(100);

@@ -20,7 +20,14 @@ public sealed class ProductPriceConfiguration : IEntityTypeConfiguration<Product
             .IsRequired();
 
         builder.Property(productPrice => productPrice.CreatedAt)
-            .IsRequired();
+            .IsRequired()
+            .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+        builder.Property(productPrice => productPrice.UpdatedAt)
+            .IsRequired()
+            .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+        builder.HasQueryFilter(productPrice => productPrice.DeletedAt == null);
 
         builder.HasIndex(productPrice => new
         {

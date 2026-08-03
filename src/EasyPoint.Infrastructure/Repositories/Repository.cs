@@ -1,11 +1,12 @@
-﻿using EasyPoint.Infrastructure.Data.Context;
+using EasyPoint.Domain.Common.Entities;
 using EasyPoint.Domain.Repositories;
+using EasyPoint.Infrastructure.Data.Context;
 using Microsoft.EntityFrameworkCore;
 
 namespace EasyPoint.Infrastructure.Repositories;
 
 public class Repository<TEntity> : IRepository<TEntity>
-    where TEntity : class
+    where TEntity : class, IEntity
 {
     private readonly DbContext _context;
     private readonly DbSet<TEntity> _dbSet;
@@ -16,12 +17,12 @@ public class Repository<TEntity> : IRepository<TEntity>
         _dbSet = context.Set<TEntity>();
     }
 
-    public async Task<TEntity?> GetByIdAsync(
+    public Task<TEntity?> GetByIdAsync(
         Guid id,
         CancellationToken cancellationToken = default)
     {
-        return await _dbSet.FindAsync(
-            new object[] { id },
+        return _dbSet.SingleOrDefaultAsync(
+            entity => entity.Id == id,
             cancellationToken);
     }
 

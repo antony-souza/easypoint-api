@@ -4,5 +4,6 @@ using MediatR;
 namespace EasyPoint.Application.UseCases.Stores.Create;
 
 public sealed record Command(
-    string Name
+    string Name,
+    string Cnpj
 ) : IRequest<Result<Response>>;

@@ -1,11 +1,13 @@
 using EasyPoint.Application.UseCases.Products.Create;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EasyPoint.Api.Controllers.Products;
 
 [ApiController]
 [Route("products")]
+[Authorize]
 public sealed class ProductController(ISender mediator)
     : ControllerBase
 {

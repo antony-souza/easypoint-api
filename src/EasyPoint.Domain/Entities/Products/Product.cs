@@ -1,12 +1,12 @@
 
 using EasyPoint.Domain.Entities.Categories;
 using EasyPoint.Domain.Entities.Stores;
+using EasyPoint.Domain.Common.Entities;
 
 namespace EasyPoint.Domain.Entities.Products;
 
-public class Product
+public class Product : Entity
 {
-    public Guid Id { get; set; }
     public string Name { get; set; } = string.Empty;
     public string BarCode { get; set; } = string.Empty;
     public Guid CategoryId { get; set; }

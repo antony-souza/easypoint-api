@@ -13,13 +13,14 @@ var connectionString = builder.Configuration.GetConnectionString("Default");
 builder.Services.AddDbContext<EasyPointDbContext>(options => { options.UseNpgsql(connectionString); });
 
 builder.Services.AddApplication();
-builder.Services.AddInfrastructure();
+builder.Services.AddInfrastructure(builder.Configuration);
 
 builder.Services.AddControllers();
 
 var app = builder.Build();
 
 app.UseHttpsRedirection();
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 

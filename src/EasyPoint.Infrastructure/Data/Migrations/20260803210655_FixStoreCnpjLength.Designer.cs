@@ -3,6 +3,7 @@ using System;
 using EasyPoint.Infrastructure.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EasyPoint.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(EasyPointDbContext))]
-    partial class EasyPointDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260803210655_FixStoreCnpjLength")]
+    partial class FixStoreCnpjLength
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -245,15 +248,10 @@ namespace EasyPoint.Infrastructure.Data.Migrations
                         .HasDatabaseName("EmailIndex");
 
                     b.HasIndex("NormalizedUserName")
+                        .IsUnique()
                         .HasDatabaseName("UserNameIndex");
 
-                    b.HasIndex("StoreId", "NormalizedEmail")
-                        .IsUnique()
-                        .HasDatabaseName("IX_AspNetUsers_StoreId_NormalizedEmail");
-
-                    b.HasIndex("StoreId", "NormalizedUserName")
-                        .IsUnique()
-                        .HasDatabaseName("IX_AspNetUsers_StoreId_NormalizedUserName");
+                    b.HasIndex("StoreId");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });

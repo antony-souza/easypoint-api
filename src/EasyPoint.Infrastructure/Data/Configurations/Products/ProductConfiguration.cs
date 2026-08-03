@@ -15,6 +15,16 @@ public sealed class ProductConfiguration : IEntityTypeConfiguration<Product>
         builder.Property(product => product.Id)
             .ValueGeneratedOnAdd();
 
+        builder.Property(product => product.CreatedAt)
+            .IsRequired()
+            .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+        builder.Property(product => product.UpdatedAt)
+            .IsRequired()
+            .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+        builder.HasQueryFilter(product => product.DeletedAt == null);
+
         builder.Property(product => product.Name)
             .IsRequired()
             .HasMaxLength(150);

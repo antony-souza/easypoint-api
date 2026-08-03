@@ -1,13 +1,12 @@
 using EasyPoint.Domain.Entities.Products;
 using EasyPoint.Domain.Entities.Stores;
+using EasyPoint.Domain.Common.Entities;
 
 namespace EasyPoint.Domain.Entities.ProductPrices;
 
-public class ProductPrice
+public class ProductPrice : Entity
 {
-    public Guid Id { get; set; }
     public decimal Price { get; set; }
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public Guid ProductId { get; set; }
     public Product Product { get; set; } = null!;
     public Guid StoreId { get; set; }

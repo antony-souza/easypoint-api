@@ -1,6 +1,8 @@
-﻿namespace EasyPoint.Domain.Repositories;
+using EasyPoint.Domain.Common.Entities;
 
-public interface IRepository<TEntity> where TEntity : class
+namespace EasyPoint.Domain.Repositories;
+
+public interface IRepository<TEntity> where TEntity : class, IEntity
 {
     Task<TEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
     Task<TEntity> CreateAsync(TEntity entity, CancellationToken cancellationToken = default);

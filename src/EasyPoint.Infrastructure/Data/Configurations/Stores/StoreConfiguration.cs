@@ -15,8 +15,24 @@ public sealed class StoreConfiguration : IEntityTypeConfiguration<Store>
         builder.Property(store => store.Id)
             .ValueGeneratedOnAdd();
 
+        builder.Property(store => store.CreatedAt)
+            .IsRequired()
+            .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+        builder.Property(store => store.UpdatedAt)
+            .IsRequired()
+            .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+        builder.HasQueryFilter(store => store.DeletedAt == null);
+
         builder.Property(store => store.Name)
             .IsRequired()
             .HasMaxLength(150);
+
+        builder.Property(store => store.Cnpj)
+            .IsRequired()
+            .HasMaxLength(18);
+
+        builder.HasIndex(store => store.Cnpj).IsUnique();
     }
 }
