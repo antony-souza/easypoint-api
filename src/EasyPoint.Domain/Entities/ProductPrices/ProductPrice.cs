@@ -9,7 +9,7 @@ public class ProductPrice
     public decimal Price { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public Guid ProductId { get; set; }
-    public Product Product { get; set; } = new Product();
+    public Product Product { get; set; } = null!;
     public Guid StoreId { get; set; }
-    public Store Store { get; set; } = new Store();
+    public Store Store { get; set; } = null!;
 }

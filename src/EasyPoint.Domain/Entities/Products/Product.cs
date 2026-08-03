@@ -8,9 +8,9 @@ public class Product
 {
     public Guid Id { get; set; }
     public string Name { get; set; } = string.Empty;
-    public string BarCode { get; set; } = String.Empty;
+    public string BarCode { get; set; } = string.Empty;
     public Guid CategoryId { get; set; }
-    public Category Category { get; set; } = new Category();
+    public Category Category { get; set; } = null!;
     public Guid StoreId { get; set; }
-    public Store Store { get; set; } = new Store();
+    public Store Store { get; set; } = null!;
 }

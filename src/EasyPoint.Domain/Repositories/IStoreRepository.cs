@@ -1,6 +1,7 @@
-﻿namespace EasyPoint.Domain.Repositories;
+﻿using EasyPoint.Domain.Entities.Stores;
 
-public interface IStoreRepository
+namespace EasyPoint.Domain.Repositories;
+
+public interface IStoreRepository : IRepository<Store>
 {
-    
 }

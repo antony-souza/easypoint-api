@@ -1,6 +1,9 @@
-﻿namespace EasyPoint.Infrastructure.Repositories;
+﻿using EasyPoint.Domain.Entities.Stores;
+using EasyPoint.Domain.Repositories;
+using EasyPoint.Infrastructure.Data.Context;
 
-public class StoreRepository
+namespace EasyPoint.Infrastructure.Repositories;
+
+public class StoreRepository(EasyPointDbContext context) : Repository<Store>(context), IStoreRepository
 {
-    
 }

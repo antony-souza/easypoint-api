@@ -13,5 +13,6 @@
 
   <ItemGroup>
     <Folder Include="UseCases\Categories\" />
+    <Folder Include="UseCases\Stores\Update\" />
   </ItemGroup>
 </Project>

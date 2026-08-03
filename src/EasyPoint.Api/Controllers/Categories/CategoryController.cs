@@ -1,6 +1,10 @@
-﻿namespace EasyPoint.Api.Controllers.Categories;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
 
-public class CategoryController
+namespace EasyPoint.Api.Controllers.Categories;
+
+[ApiController]
+[Route("/categories")]
+public class CategoryController(ISender mediator) : ControllerBase
 {
-    
 }

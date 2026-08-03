@@ -6,7 +6,7 @@ namespace EasyPoint.Api.Controllers.Products;
 
 [ApiController]
 [Route("products")]
-public sealed class ProductController(ISender sender)
+public sealed class ProductController(ISender mediator)
     : ControllerBase
 {
     [HttpPost]
@@ -14,7 +14,7 @@ public sealed class ProductController(ISender sender)
         [FromBody] Command command,
         CancellationToken cancellationToken)
     {
-        var result = await sender.Send(
+        var result = await mediator.Send(
             command,
             cancellationToken);
 
