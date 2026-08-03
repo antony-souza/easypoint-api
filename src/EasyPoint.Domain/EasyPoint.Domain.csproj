@@ -2,4 +2,7 @@
   <PropertyGroup>
     <RootNamespace>EasyPoint.Domain</RootNamespace>
   </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="Enums\" />
+  </ItemGroup>
 </Project>

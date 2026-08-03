@@ -6,4 +6,12 @@
   <ItemGroup>
     <ProjectReference Include="..\EasyPoint.Domain\EasyPoint.Domain.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="14.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="UseCases\Categories\" />
+  </ItemGroup>
 </Project>
