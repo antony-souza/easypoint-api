@@ -4,12 +4,9 @@ using EasyPoint.Infrastructure.Data.Context;
 
 namespace EasyPoint.Infrastructure.Repositories;
 
-public class ProductRepository : Repository<Product>, IProductRepository
+public class ProductRepository(EasyPointDbContext context)
+    : Repository<Product>(context), IProductRepository
 {
-    public ProductRepository(EasyPointDbContext context) : base(context)
-    {
-    }
-
     public Task<Product?> GetByBarCodeAsync(
         string barCode,
         CancellationToken cancellationToken = default)
