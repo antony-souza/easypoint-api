@@ -1,6 +1,5 @@
-﻿namespace EasyPoint.Domain.Repositories;
+﻿using EasyPoint.Domain.Entities.Categories;
 
-public interface ICategoryRepository
-{
-    
-}
+namespace EasyPoint.Domain.Repositories;
+
+public interface ICategoryRepository : IRepository<Category>;

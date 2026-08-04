@@ -1,3 +1,9 @@
-﻿namespace EasyPoint.Application.UseCases.Categories.Create;
+﻿using EasyPoint.Application.Common.Results;
+using MediatR;
 
-public record Command();
+namespace EasyPoint.Application.UseCases.Categories.Create;
+
+public sealed record Command(
+    Guid StoreId,
+    string Name
+) : IRequest<Result<Response>>;

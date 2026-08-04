@@ -26,8 +26,8 @@ public sealed class AppUserConfiguration : IEntityTypeConfiguration<AppUser>
             .HasDatabaseName("IX_AspNetUsers_StoreId_NormalizedUserName")
             .IsUnique();
 
-        builder.HasIndex(user => new { user.StoreId, user.NormalizedEmail })
-            .HasDatabaseName("IX_AspNetUsers_StoreId_NormalizedEmail")
+        builder.HasIndex(user => user.NormalizedEmail)
+            .HasDatabaseName("EmailIndex")
             .IsUnique();
 
         builder.HasOne<Store>()

@@ -1,3 +1,7 @@
 ﻿namespace EasyPoint.Application.UseCases.Categories.Create;
 
-public record Response();
+public sealed record Response(
+    Guid Id,
+    string Name,
+    Guid StoreId
+);

@@ -35,11 +35,11 @@ public sealed class AuthenticationService(
             throw new InvalidOperationException("Já existe um usuário com este nome de usuário nesta loja.");
 
         var emailAlreadyExists = await userManager.Users.AnyAsync(
-            user => user.StoreId == storeId && user.NormalizedEmail == normalizedEmail,
+            user => user.NormalizedEmail == normalizedEmail,
             cancellationToken);
 
         if (emailAlreadyExists)
-            throw new InvalidOperationException("Já existe um usuário cadastrado com este e-mail nesta loja.");
+            throw new InvalidOperationException("Já existe um usuário cadastrado com este e-mail.");
 
         var user = new AppUser
         {
@@ -59,14 +59,14 @@ public sealed class AuthenticationService(
     }
 
     public async Task<AuthenticationResponse?> LoginAsync(
-        Guid storeId,
         string email,
         string password,
         CancellationToken cancellationToken = default)
     {
         var normalizedEmail = userManager.NormalizeEmail(email.Trim());
+
         var user = await userManager.Users.SingleOrDefaultAsync(
-            item => item.StoreId == storeId && item.NormalizedEmail == normalizedEmail,
+            item => item.NormalizedEmail == normalizedEmail,
             cancellationToken);
 
         if (user is null)

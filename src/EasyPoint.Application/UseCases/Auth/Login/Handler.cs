@@ -11,20 +11,23 @@ public sealed class Handler(IAuthenticationService authenticationService)
         Command request,
         CancellationToken cancellationToken)
     {
-        if (request.StoreId == Guid.Empty)
-            return Result<AuthenticationResponse>.Failure("StoreId is required.");
-
         if (string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Password))
             return Result<AuthenticationResponse>.Failure("Email and password are required.");
 
-        var response = await authenticationService.LoginAsync(
-            request.StoreId,
-            request.Email,
-            request.Password,
-            cancellationToken);
+        try
+        {
+            var response = await authenticationService.LoginAsync(
+                request.Email,
+                request.Password,
+                cancellationToken);
 
-        return response is null
-            ? Result<AuthenticationResponse>.Failure("Invalid email or password.")
-            : Result<AuthenticationResponse>.Success(response);
+            return response is null
+                ? Result<AuthenticationResponse>.Failure("Invalid email or password.")
+                : Result<AuthenticationResponse>.Success(response);
+        }
+        catch (InvalidOperationException exception)
+        {
+            return Result<AuthenticationResponse>.Failure(exception.Message);
+        }
     }
 }

@@ -11,7 +11,6 @@ public interface IAuthenticationService
         CancellationToken cancellationToken = default);
 
     Task<AuthenticationResponse?> LoginAsync(
-        Guid storeId,
         string email,
         string password,
         CancellationToken cancellationToken = default);

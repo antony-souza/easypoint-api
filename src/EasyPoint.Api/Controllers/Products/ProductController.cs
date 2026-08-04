@@ -8,8 +8,7 @@ namespace EasyPoint.Api.Controllers.Products;
 [ApiController]
 [Route("products")]
 [Authorize]
-public sealed class ProductController(ISender mediator)
-    : ControllerBase
+public sealed class ProductController(ISender mediator) : ControllerBase
 {
     [HttpPost]
     public async Task<IActionResult> Create(
