@@ -1,6 +1,7 @@
 using EasyPoint.Application.Common.Behaviors;
 using EasyPoint.Application.UseCases.Auth.Login;
 using EasyPoint.Application.UseCases.Categories.Create;
+using EasyPoint.Application.UseCases.Products.Create;
 using EasyPoint.Application.UseCases.Products.GetAll;
 using EasyPoint.Application.UseCases.Stores.Create;
 using FluentValidation;
@@ -19,14 +20,15 @@ public static class DependencyInjection
             x.RegisterServicesFromAssembly(typeof(DependencyInjection).Assembly);
         });
         
+        //Default Validator with fluent-validation
         services.AddTransient(
             typeof(IPipelineBehavior<,>),
             typeof(ValidationBehavior<,>));
 
-        //Default Validator
         services.AddScoped<IValidator<LoginCommand>, LoginCommandValidator>();
         services.AddScoped<IValidator<CreateCategoryCommand>, CreateCategoryCommandValidator>();
         services.AddScoped<IValidator<GetProductsQuery>, GetProductsQueryValidator>();
+        services.AddScoped<IValidator<CreateProductCommand>, CreateProductCommandValidator>();
         services.AddScoped<IValidator<CreateStoreCommand>, CreateStoreCommandValidator>();
 
         return services;
