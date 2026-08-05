@@ -1,4 +1,5 @@
 using EasyPoint.Domain.Entities.Categories;
+using EasyPoint.Domain.Entities.CashRegisters;
 using EasyPoint.Domain.Entities.ProductPrices;
 using EasyPoint.Domain.Entities.Products;
 using EasyPoint.Domain.Common.Entities;
@@ -12,4 +13,5 @@ public class Store : Entity
     public ICollection<Product> Products { get; set; } = new List<Product>();
     public ICollection<Category> Categories { get; set; } = new List<Category>();
     public ICollection<ProductPrice> ProductPrices { get; set; } = new List<ProductPrice>();
+    public ICollection<CashRegister> CashRegisters { get; set; } = new List<CashRegister>();
 }

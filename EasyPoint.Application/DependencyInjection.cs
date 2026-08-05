@@ -1,5 +1,7 @@
 using EasyPoint.Application.Common.Behaviors;
 using EasyPoint.Application.UseCases.Auth.Login;
+using EasyPoint.Application.UseCases.CashRegisters.Create;
+using EasyPoint.Application.UseCases.CashRegisters.GetAll;
 using EasyPoint.Application.UseCases.Categories.Create;
 using EasyPoint.Application.UseCases.Products.Create;
 using EasyPoint.Application.UseCases.Products.GetAll;
@@ -30,6 +32,8 @@ public static class DependencyInjection
         services.AddScoped<IValidator<GetProductsQuery>, GetProductsQueryValidator>();
         services.AddScoped<IValidator<CreateProductCommand>, CreateProductCommandValidator>();
         services.AddScoped<IValidator<CreateStoreCommand>, CreateStoreCommandValidator>();
+        services.AddScoped<IValidator<CreateCashRegisterCommand>, CreateCashRegisterCommandValidator>();
+        services.AddScoped<IValidator<GetCashRegistersQuery>, GetCashRegistersQueryValidator>();
 
         return services;
     }
