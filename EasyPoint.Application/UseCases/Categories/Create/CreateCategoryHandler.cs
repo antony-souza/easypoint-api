@@ -5,10 +5,10 @@ using MediatR;
 
 namespace EasyPoint.Application.UseCases.Categories.Create;
 
-public class Handler(ICategoryRepository categoryRepository) : IRequestHandler<Command, Result<Response>>
+public class Handler(ICategoryRepository categoryRepository) : IRequestHandler<CreateCategoryCommand, Result<Response>>
 {
     public async Task<Result<Response>> Handle(
-        Command request,
+        CreateCategoryCommand request,
         CancellationToken cancellationToken)
     {
         if (string.IsNullOrWhiteSpace(request.Name))

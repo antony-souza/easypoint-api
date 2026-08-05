@@ -6,9 +6,9 @@ using MediatR;
 
 namespace EasyPoint.Application.UseCases.Stores.Create;
 
-public class Handler(IStoreRepository storeRepository) : IRequestHandler<Command, Result<Response>>
+public class Handler(IStoreRepository storeRepository) : IRequestHandler<CreateStoreCommand, Result<Response>>
 {
-    public async Task<Result<Response>> Handle(Command request, CancellationToken cancellationToken)
+    public async Task<Result<Response>> Handle(CreateStoreCommand request, CancellationToken cancellationToken)
     {
         if (string.IsNullOrWhiteSpace(request.Name))
         {

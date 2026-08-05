@@ -7,10 +7,10 @@ namespace EasyPoint.Application.UseCases.Products.Create;
 
 public sealed class Handler(
     IProductRepository productRepository)
-    : IRequestHandler<Command, Result<Response>>
+    : IRequestHandler<CreateProductCommand, Result<Response>>
 {
     public async Task<Result<Response>> Handle(
-        Command request,
+        CreateProductCommand request,
         CancellationToken cancellationToken)
     {
         if (string.IsNullOrWhiteSpace(request.Name))

@@ -5,15 +5,12 @@ using MediatR;
 namespace EasyPoint.Application.UseCases.Auth.Login;
 
 public sealed class Handler(IAuthenticationService authenticationService)
-    : IRequestHandler<Command, Result<AuthenticationResponse>>
+    : IRequestHandler<LoginCommand, Result<AuthenticationResponse>>
 {
     public async Task<Result<AuthenticationResponse>> Handle(
-        Command request,
+        LoginCommand request,
         CancellationToken cancellationToken)
     {
-        if (string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Password))
-            return Result<AuthenticationResponse>.Failure("Email and password are required.");
-
         try
         {
             var response = await authenticationService.LoginAsync(
