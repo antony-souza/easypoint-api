@@ -1,4 +1,5 @@
 using EasyPoint.Application.UseCases.Products.Create;
+using EasyPoint.Application.UseCases.Products.GetAll;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,13 +11,25 @@ namespace EasyPoint.Api.Controllers.Products;
 [Authorize]
 public sealed class ProductController(ISender mediator) : ControllerBase
 {
+    [HttpGet]
+    public async Task<IActionResult> GetAll(
+        [FromQuery] GetProductsQuery query,
+        CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(query, cancellationToken);
+        
+        return result.IsSuccess
+            ? Ok(result.Value)
+            : BadRequest(result.Error);
+    }
+
     [HttpPost]
     public async Task<IActionResult> Create(
-        [FromBody] Command command,
+        [FromBody] CreateProductCommand createProductCommand,
         CancellationToken cancellationToken)
     {
         var result = await mediator.Send(
-            command,
+            createProductCommand,
             cancellationToken);
 
         return result.IsSuccess

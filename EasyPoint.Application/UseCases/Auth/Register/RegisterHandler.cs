@@ -5,7 +5,7 @@ using MediatR;
 
 namespace EasyPoint.Application.UseCases.Auth.Register;
 
-public sealed class Handler(
+public sealed class RegisterHandler(
     IStoreRepository storeRepository,
     IAuthenticationService authenticationService)
     : IRequestHandler<RegisterCommand, Result<AuthenticationResponse>>

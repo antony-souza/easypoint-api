@@ -63,11 +63,10 @@ A descrição completa está em [docs/architecture.md](docs/architecture.md).
 
 ```text
 easypoint-api/
-├── src/
-│   ├── EasyPoint.Api/
-│   ├── EasyPoint.Application/
-│   ├── EasyPoint.Domain/
-│   └── EasyPoint.Infrastructure/
+├── EasyPoint.Api/
+├── EasyPoint.Application/
+├── EasyPoint.Domain/
+├── EasyPoint.Infrastructure/
 ├── tests/
 │   ├── EasyPoint.UnitTests/
 │   ├── EasyPoint.IntegrationTests/

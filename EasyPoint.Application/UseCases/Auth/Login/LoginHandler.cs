@@ -4,7 +4,7 @@ using MediatR;
 
 namespace EasyPoint.Application.UseCases.Auth.Login;
 
-public sealed class Handler(IAuthenticationService authenticationService)
+public sealed class LoginHandler(IAuthenticationService authenticationService)
     : IRequestHandler<LoginCommand, Result<AuthenticationResponse>>
 {
     public async Task<Result<AuthenticationResponse>> Handle(

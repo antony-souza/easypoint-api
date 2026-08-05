@@ -3,7 +3,7 @@ using MediatR;
 
 namespace EasyPoint.Application.UseCases.Categories.Create;
 
-public sealed record Command(
+public sealed record CreateCategoryCommand(
     Guid StoreId,
     string Name
-) : IRequest<Result<Response>>;
+) : IRequest<Result<CreateCategoryResponse>>;

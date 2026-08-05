@@ -2,9 +2,9 @@ using FluentValidation;
 
 namespace EasyPoint.Application.UseCases.Auth.Login;
 
-public sealed class CommandValidator : AbstractValidator<LoginCommand>
+public sealed class LoginCommandValidator : AbstractValidator<LoginCommand>
 {
-    public CommandValidator()
+    public LoginCommandValidator()
     {
         RuleFor(x => x.Email)
             .NotEmpty()

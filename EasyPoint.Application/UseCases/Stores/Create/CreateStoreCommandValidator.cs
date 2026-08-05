@@ -1,6 +1,18 @@
-﻿namespace EasyPoint.Application.UseCases.Stores.Create;
+﻿using FluentValidation;
 
-public class CreateStoreCommandValidator
+namespace EasyPoint.Application.UseCases.Stores.Create;
+
+public class CreateStoreCommandValidator : AbstractValidator<CreateStoreCommand>
 {
-    
+    public CreateStoreCommandValidator()
+    {
+        RuleFor(x => x.Name)
+            .NotEmpty()
+            .NotNull();
+        RuleFor(x => x.Cnpj)
+            .MinimumLength(14)
+            .MaximumLength(18)
+            .NotEmpty()
+            .NotNull();
+    }
 }

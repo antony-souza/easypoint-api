@@ -12,11 +12,11 @@ public class StoreController(ISender mediator) : ControllerBase
 {
     [HttpPost]
     public async Task<IActionResult> CreateProduct(
-        [FromBody] Command command,
+        [FromBody] CreateStoreCommand createStoreCommand,
         CancellationToken cancellationToken
     )
     {
-        var result = await mediator.Send(command, cancellationToken);
+        var result = await mediator.Send(createStoreCommand, cancellationToken);
 
         return result.IsSuccess
             ? Ok(result.Value)

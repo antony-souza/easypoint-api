@@ -1,5 +1,6 @@
 using DotNetEnv;
 using EasyPoint.Application;
+using EasyPoint.Api.ExceptionHandling;
 using EasyPoint.Infrastructure;
 using EasyPoint.Infrastructure.Data.Context;
 using Microsoft.EntityFrameworkCore;
@@ -14,11 +15,14 @@ builder.Services.AddDbContext<EasyPointDbContext>(options => { options.UseNpgsql
 
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddExceptionHandler<ValidationExceptionHandler>();
+builder.Services.AddProblemDetails();
 
 builder.Services.AddControllers();
 
 var app = builder.Build();
 
+app.UseExceptionHandler();
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();

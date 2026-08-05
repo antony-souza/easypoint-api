@@ -6,30 +6,22 @@ using MediatR;
 
 namespace EasyPoint.Application.UseCases.Stores.Create;
 
-public class Handler(IStoreRepository storeRepository) : IRequestHandler<CreateStoreCommand, Result<Response>>
+public class CreateStoreHandler(IStoreRepository storeRepository)
+    : IRequestHandler<CreateStoreCommand, Result<CreateStoreResponse>>
 {
-    public async Task<Result<Response>> Handle(CreateStoreCommand request, CancellationToken cancellationToken)
+    public async Task<Result<CreateStoreResponse>> Handle(CreateStoreCommand request,
+        CancellationToken cancellationToken)
     {
         if (string.IsNullOrWhiteSpace(request.Name))
         {
-            return Result<Response>.Failure("Name is required");
+            return Result<CreateStoreResponse>.Failure("Name is required");
         }
 
-        var cnpj = request.Cnpj.Trim();
-        var isValidCnpjFormat = Regex.IsMatch(cnpj, @"^\d{14}$") ||
-                                Regex.IsMatch(cnpj, @"^\d{2}\.\d{3}\.\d{3}/\d{4}-\d{2}$");
-
-        if (!isValidCnpjFormat)
-        {
-            return Result<Response>.Failure(
-                "CNPJ must contain 14 digits, with or without the mask 00.000.000/0000-00.");
-        }
-
-        var existingStore = await storeRepository.GetByCnpjAsync(cnpj, cancellationToken);
+        var existingStore = await storeRepository.GetByCnpjAsync(request.Cnpj, cancellationToken);
 
         if (existingStore is not null)
         {
-            return Result<Response>.Failure(
+            return Result<CreateStoreResponse>.Failure(
                 "Já existe uma loja cadastrada com este CNPJ.");
         }
 
@@ -37,16 +29,16 @@ public class Handler(IStoreRepository storeRepository) : IRequestHandler<CreateS
         {
             Id = Guid.NewGuid(),
             Name = request.Name,
-            Cnpj = cnpj
+            Cnpj = request.Cnpj
         };
 
         var createdStore = await storeRepository.CreateAsync(store, cancellationToken);
 
-        var response = new Response(
+        var response = new CreateStoreResponse(
             Id: createdStore.Id,
             Name: createdStore.Name,
             Cnpj: createdStore.Cnpj);
 
-        return Result<Response>.Success(response);
+        return Result<CreateStoreResponse>.Success(response);
     }
 }

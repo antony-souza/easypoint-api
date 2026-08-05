@@ -4,7 +4,7 @@ using MediatR;
 
 namespace EasyPoint.Application.UseCases.Auth.Register;
 
-public sealed record Command(
+public sealed record RegisterCommand(
     Guid StoreId,
     string Name,
     string UserName,

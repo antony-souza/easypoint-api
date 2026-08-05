@@ -12,11 +12,11 @@ public class CategoryController(ISender mediator) : ControllerBase
 {
     [HttpPost]
     public async Task<IActionResult> CreateCategory(
-        [FromBody] Command command,
+        [FromBody] CreateCategoryCommand createCategoryCommand,
         CancellationToken cancellationToken
     )
     {
-        var result = await mediator.Send(command, cancellationToken);
+        var result = await mediator.Send(createCategoryCommand, cancellationToken);
 
         return result.IsSuccess
             ? Ok(result.Value)

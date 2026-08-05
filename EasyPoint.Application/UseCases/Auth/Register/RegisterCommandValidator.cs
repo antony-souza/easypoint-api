@@ -2,9 +2,9 @@
 
 namespace EasyPoint.Application.UseCases.Auth.Register;
 
-public sealed class CommandValidator : AbstractValidator<RegisterCommand>
+public sealed class RegisterCommandValidator : AbstractValidator<RegisterCommand>
 {
-    public CommandValidator()
+    public RegisterCommandValidator()
     {
         RuleFor(x => x.StoreId).NotEmpty();
         RuleFor(x => x.Name).NotEmpty();

@@ -5,15 +5,15 @@ using MediatR;
 
 namespace EasyPoint.Application.UseCases.Categories.Create;
 
-public class Handler(ICategoryRepository categoryRepository) : IRequestHandler<CreateCategoryCommand, Result<Response>>
+public class CreateCategoryHandler(ICategoryRepository categoryRepository) : IRequestHandler<CreateCategoryCommand, Result<CreateCategoryResponse>>
 {
-    public async Task<Result<Response>> Handle(
+    public async Task<Result<CreateCategoryResponse>> Handle(
         CreateCategoryCommand request,
         CancellationToken cancellationToken)
     {
         if (string.IsNullOrWhiteSpace(request.Name))
         {
-            return Result<Response>.Failure(
+            return Result<CreateCategoryResponse>.Failure(
                 "O nome do produto é obrigatório.");
         }
 
@@ -28,12 +28,12 @@ public class Handler(ICategoryRepository categoryRepository) : IRequestHandler<C
             category,
             cancellationToken);
 
-        var response = new Response(
+        var response = new CreateCategoryResponse(
             Id: createCategory.Id,
             Name: createCategory.Name,
             StoreId: createCategory.StoreId
         );
 
-        return Result<Response>.Success(response);
+        return Result<CreateCategoryResponse>.Success(response);
     }
 }

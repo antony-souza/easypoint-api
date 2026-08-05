@@ -4,7 +4,7 @@ using MediatR;
 
 namespace EasyPoint.Application.UseCases.Auth.Login;
 
-public sealed record Command(
+public sealed record LoginCommand(
     string Email,
     string Password
 ) : IRequest<Result<AuthenticationResponse>>;

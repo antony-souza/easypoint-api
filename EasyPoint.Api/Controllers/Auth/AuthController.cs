@@ -1,8 +1,8 @@
+using EasyPoint.Application.UseCases.Auth.Login;
+using EasyPoint.Application.UseCases.Auth.Register;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using LoginCommand = EasyPoint.Application.UseCases.Auth.Login.Command;
-using RegisterCommand = EasyPoint.Application.UseCases.Auth.Register.Command;
 
 namespace EasyPoint.Api.Controllers.Auth;
 
@@ -13,10 +13,10 @@ public sealed class AuthController(ISender sender) : ControllerBase
 {
     [HttpPost("register")]
     public async Task<IActionResult> Register(
-        [FromBody] RegisterCommand command,
+        [FromBody] RegisterCommand registerCommand,
         CancellationToken cancellationToken)
     {
-        var result = await sender.Send(command, cancellationToken);
+        var result = await sender.Send(registerCommand, cancellationToken);
 
         return result.IsSuccess
             ? StatusCode(StatusCodes.Status201Created, result.Value)
@@ -25,10 +25,10 @@ public sealed class AuthController(ISender sender) : ControllerBase
 
     [HttpPost("login")]
     public async Task<IActionResult> Login(
-        [FromBody] LoginCommand command,
+        [FromBody] LoginCommand loginCommand,
         CancellationToken cancellationToken)
     {
-        var result = await sender.Send(command, cancellationToken);
+        var result = await sender.Send(loginCommand, cancellationToken);
 
         return result.IsSuccess
             ? Ok(result.Value)
