@@ -1,4 +1,4 @@
-﻿using EasyPoint.Application.UseCases.Stores.Create;
+using EasyPoint.Application.UseCases.Stores.Create;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

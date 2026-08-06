@@ -5,4 +5,4 @@ public sealed record GetProductsItemResponse(
     string Name,
     string BarCode,
     string Category,
-    string Store);
+    string Organization);

@@ -1,6 +1,8 @@
-﻿namespace EasyPoint.Domain.Repositories;
+﻿using EasyPoint.Domain.Entities.Organizations;
 
-public interface IOrganizationRepository
+namespace EasyPoint.Domain.Repositories;
+
+public interface IOrganizationRepository : IRepository<Organization>
 {
-    
+    public Task<Organization?> GetByCnpjAsync(string cnpj, CancellationToken cancellationToken = default);
 }

@@ -3,5 +3,6 @@
 public sealed record CreateStoreResponse(
     Guid Id,
     string Name,
-    string Cnpj
+    string Cnpj,
+    string Organization
 );

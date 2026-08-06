@@ -5,23 +5,24 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EasyPoint.Infrastructure.Repositories;
 
-public class ProductRepository(EasyPointDbContext context)
+public sealed class ProductRepository(EasyPointDbContext context)
     : Repository<Product>(context), IProductRepository
 {
-    public async Task<(IReadOnlyList<Product> Products, int TotalItems)> GetPagedByStoreAsync(
-        Guid storeId,
+    public async Task<(
+        IReadOnlyList<Product> Products,
+        int TotalItems)> GetPagedByOrganizationAsync(
+        Guid organizationId,
         int skip,
         int take,
         CancellationToken cancellationToken = default)
     {
         var query = context.Products
             .AsNoTracking()
-            .Where(product => product.StoreId == storeId)
+            .Where(product => product.OrganizationId == organizationId)
             .OrderBy(product => product.Name)
             .ThenBy(product => product.Id)
             .Include(product => product.Category)
-            .Include(product => product.Store);
-
+            .Include(product => product.Organization);
 
         var totalItems = await query.CountAsync(cancellationToken);
         var products = await query
@@ -36,6 +37,8 @@ public class ProductRepository(EasyPointDbContext context)
         string barCode,
         CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        return context.Products.SingleOrDefaultAsync(
+            product => product.BarCode == barCode,
+            cancellationToken);
     }
 }

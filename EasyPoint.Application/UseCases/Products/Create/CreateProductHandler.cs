@@ -8,6 +8,7 @@ namespace EasyPoint.Application.UseCases.Products.Create;
 
 public sealed class CreateProductHandler(
     IProductRepository productRepository,
+    ICategoryRepository categoryRepository,
     ICurrentUser currentUser)
     : IRequestHandler<CreateProductCommand, Result<CreateProductResponse>>
 {
@@ -15,13 +16,24 @@ public sealed class CreateProductHandler(
         CreateProductCommand request,
         CancellationToken cancellationToken)
     {
+        var organizationId = currentUser.OrganizationId;
+        var category = await categoryRepository.GetByIdAsync(
+            request.CategoryId,
+            cancellationToken);
+
+        if (category is null || category.OrganizationId != organizationId)
+        {
+            return Result<CreateProductResponse>.Failure(
+                "A categoria não pertence à organização do usuário.");
+        }
+
         var product = new Product
         {
             Id = Guid.NewGuid(),
-            Name = request.Name,
-            BarCode = request.BarCode,
+            Name = request.Name.Trim(),
+            BarCode = request.BarCode.Trim(),
             CategoryId = request.CategoryId,
-            StoreId = currentUser.StoreId
+            OrganizationId = organizationId
         };
 
         var createdProduct = await productRepository.CreateAsync(
@@ -33,7 +45,7 @@ public sealed class CreateProductHandler(
             createdProduct.Name,
             createdProduct.BarCode,
             createdProduct.CategoryId,
-            createdProduct.StoreId);
+            createdProduct.OrganizationId);
 
         return Result<CreateProductResponse>.Success(response);
     }

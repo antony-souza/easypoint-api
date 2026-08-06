@@ -1,4 +1,3 @@
-using EasyPoint.Domain.Entities.Stores;
 using EasyPoint.Infrastructure.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -9,30 +8,32 @@ public sealed class AppUserConfiguration : IEntityTypeConfiguration<AppUser>
 {
     public void Configure(EntityTypeBuilder<AppUser> builder)
     {
-        builder.Property(user => user.StoreId).IsRequired();
-
         builder.Property(user => user.Name)
             .IsRequired()
             .HasMaxLength(150);
 
-        builder.Property(user => user.UserName).IsRequired();
-        builder.Property(user => user.Email).IsRequired();
+        builder.Property(user => user.OrganizationId)
+            .IsRequired();
+
+        builder.Property(user => user.UserName)
+            .IsRequired();
+
+        builder.Property(user => user.Email)
+            .IsRequired();
+
+        builder.HasIndex(user => user.OrganizationId);
 
         builder.HasIndex(user => user.NormalizedUserName)
             .HasDatabaseName("UserNameIndex")
-            .IsUnique(false);
-
-        builder.HasIndex(user => new { user.StoreId, user.NormalizedUserName })
-            .HasDatabaseName("IX_AspNetUsers_StoreId_NormalizedUserName")
             .IsUnique();
 
         builder.HasIndex(user => user.NormalizedEmail)
             .HasDatabaseName("EmailIndex")
             .IsUnique();
 
-        builder.HasOne<Store>()
+        builder.HasOne(user => user.Organization)
             .WithMany()
-            .HasForeignKey(user => user.StoreId)
+            .HasForeignKey(user => user.OrganizationId)
             .OnDelete(DeleteBehavior.Restrict);
     }
 }

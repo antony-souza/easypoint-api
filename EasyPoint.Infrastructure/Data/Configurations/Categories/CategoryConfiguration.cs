@@ -12,6 +12,12 @@ public sealed class CategoryConfiguration : IEntityTypeConfiguration<Category>
 
         builder.HasKey(category => category.Id);
 
+        builder.HasAlternateKey(category => new
+        {
+            category.Id,
+            category.OrganizationId
+        });
+
         builder.Property(category => category.Id)
             .ValueGeneratedOnAdd();
 
@@ -23,15 +29,23 @@ public sealed class CategoryConfiguration : IEntityTypeConfiguration<Category>
             .IsRequired()
             .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-        builder.HasQueryFilter(category => category.DeletedAt == null);
-
         builder.Property(category => category.Name)
             .IsRequired()
             .HasMaxLength(100);
 
-        builder.HasOne(category => category.Store)
-            .WithMany(store => store.Categories)
-            .HasForeignKey(category => category.StoreId)
+        builder.HasIndex(category => new
+        {
+            category.OrganizationId,
+            category.Name
+        })
+        .IsUnique();
+
+        builder.HasOne(category => category.Organization)
+            .WithMany(organization => organization.Categories)
+            .HasForeignKey(category => category.OrganizationId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasQueryFilter(category =>
+            category.DeletedAt == null && category.Organization.DeletedAt == null);
     }
 }

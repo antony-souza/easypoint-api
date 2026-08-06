@@ -1,18 +1,14 @@
-﻿using FluentValidation;
+using FluentValidation;
 
 namespace EasyPoint.Application.UseCases.Categories.Create;
 
-public class CreateCategoryCommandValidator : AbstractValidator<CreateCategoryCommand>
+public sealed class CreateCategoryCommandValidator
+    : AbstractValidator<CreateCategoryCommand>
 {
     public CreateCategoryCommandValidator()
     {
-        RuleFor(x => x.Name)
+        RuleFor(command => command.Name)
             .NotEmpty()
-            .NotNull()
-            .MinimumLength(1)
             .MaximumLength(50);
-
-        RuleFor(x => x.StoreId)
-            .NotEmpty();
     }
 }

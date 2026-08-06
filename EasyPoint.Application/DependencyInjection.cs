@@ -3,9 +3,11 @@ using EasyPoint.Application.UseCases.Auth.Login;
 using EasyPoint.Application.UseCases.CashRegisters.Create;
 using EasyPoint.Application.UseCases.CashRegisters.GetAll;
 using EasyPoint.Application.UseCases.Categories.Create;
+using EasyPoint.Application.UseCases.Organizations.Create;
 using EasyPoint.Application.UseCases.Products.Create;
 using EasyPoint.Application.UseCases.Products.GetAll;
 using EasyPoint.Application.UseCases.Stores.Create;
+using EasyPoint.Application.UseCases.StoreUsers.Create;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,11 +19,8 @@ public static class DependencyInjection
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
         //Default Mediator CQRS
-        services.AddMediatR(x =>
-        {
-            x.RegisterServicesFromAssembly(typeof(DependencyInjection).Assembly);
-        });
-        
+        services.AddMediatR(x => { x.RegisterServicesFromAssembly(typeof(DependencyInjection).Assembly); });
+
         //Default Validator with fluent-validation
         services.AddTransient(
             typeof(IPipelineBehavior<,>),
@@ -34,6 +33,8 @@ public static class DependencyInjection
         services.AddScoped<IValidator<CreateStoreCommand>, CreateStoreCommandValidator>();
         services.AddScoped<IValidator<CreateCashRegisterCommand>, CreateCashRegisterCommandValidator>();
         services.AddScoped<IValidator<GetCashRegistersQuery>, GetCashRegistersQueryValidator>();
+        services.AddScoped<IValidator<CreateStoreUserCommand>, CreateStoreUserCommandValidator>();
+        services.AddScoped<IValidator<CreateOrganizationCommand>, CreateOrganizationCommandValidator>();
 
         return services;
     }

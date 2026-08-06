@@ -7,6 +7,9 @@ public sealed class GetCashRegistersQueryValidator
 {
     public GetCashRegistersQueryValidator()
     {
+        RuleFor(query => query.StoreId)
+            .NotEmpty();
+
         RuleFor(query => query.Page)
             .GreaterThanOrEqualTo(1);
 

@@ -23,7 +23,8 @@ public sealed class StoreConfiguration : IEntityTypeConfiguration<Store>
             .IsRequired()
             .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-        builder.HasQueryFilter(store => store.DeletedAt == null);
+        builder.HasQueryFilter(store =>
+            store.DeletedAt == null && store.Organization.DeletedAt == null);
 
         builder.Property(store => store.Name)
             .IsRequired()
@@ -34,5 +35,10 @@ public sealed class StoreConfiguration : IEntityTypeConfiguration<Store>
             .HasMaxLength(18);
 
         builder.HasIndex(store => store.Cnpj).IsUnique();
+
+        builder.HasOne(store => store.Organization)
+            .WithMany(organization => organization.Stores)
+            .HasForeignKey(store => store.OrganizationId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

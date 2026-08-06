@@ -2,6 +2,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using EasyPoint.Application.Common.Authentication;
+using EasyPoint.Infrastructure.Data.Context;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -12,39 +13,50 @@ namespace EasyPoint.Infrastructure.Identity;
 public sealed class AuthenticationService(
     UserManager<AppUser> userManager,
     SignInManager<AppUser> signInManager,
+    EasyPointDbContext context,
     IOptions<JwtOptions> jwtOptions) : IAuthenticationService
 {
     private readonly JwtOptions _jwtOptions = jwtOptions.Value;
 
     public async Task<AuthenticationResponse> RegisterAsync(
-        Guid storeId,
+        Guid organizationId,
         string name,
         string userName,
         string email,
         string password,
         CancellationToken cancellationToken = default)
     {
+        var organizationExists = await context.Organizations
+            .AnyAsync(
+                organization => organization.Id == organizationId,
+                cancellationToken);
+
+        if (!organizationExists)
+            throw new InvalidOperationException("Organization was not found.");
+
         var normalizedUserName = userManager.NormalizeName(userName.Trim());
         var normalizedEmail = userManager.NormalizeEmail(email.Trim());
 
         var userNameAlreadyExists = await userManager.Users.AnyAsync(
-            user => user.StoreId == storeId && user.NormalizedUserName == normalizedUserName,
+            user => user.NormalizedUserName == normalizedUserName,
             cancellationToken);
 
         if (userNameAlreadyExists)
-            throw new InvalidOperationException("Já existe um usuário com este nome de usuário nesta loja.");
+            throw new InvalidOperationException(
+                "Já existe um usuário com este nome de usuário.");
 
         var emailAlreadyExists = await userManager.Users.AnyAsync(
             user => user.NormalizedEmail == normalizedEmail,
             cancellationToken);
 
         if (emailAlreadyExists)
-            throw new InvalidOperationException("Já existe um usuário cadastrado com este e-mail.");
+            throw new InvalidOperationException(
+                "Já existe um usuário cadastrado com este e-mail.");
 
         var user = new AppUser
         {
             Id = Guid.NewGuid(),
-            StoreId = storeId,
+            OrganizationId = organizationId,
             Name = name.Trim(),
             UserName = userName.Trim(),
             Email = email.Trim()
@@ -53,9 +65,12 @@ public sealed class AuthenticationService(
         var result = await userManager.CreateAsync(user, password);
 
         if (!result.Succeeded)
-            throw new InvalidOperationException(string.Join(" ", result.Errors.Select(error => error.Description)));
+        {
+            throw new InvalidOperationException(
+                string.Join(" ", result.Errors.Select(error => error.Description)));
+        }
 
-        return await CreateResponseAsync(user);
+        return CreateResponse(user);
     }
 
     public async Task<AuthenticationResponse?> LoginAsync(
@@ -65,24 +80,39 @@ public sealed class AuthenticationService(
     {
         var normalizedEmail = userManager.NormalizeEmail(email.Trim());
 
-        var user = await userManager.Users.SingleOrDefaultAsync(
-            item => item.NormalizedEmail == normalizedEmail,
-            cancellationToken);
+        var user = await userManager.Users
+            .SingleOrDefaultAsync(
+                item => item.NormalizedEmail == normalizedEmail,
+                cancellationToken);
 
         if (user is null)
             return null;
 
-        var result = await signInManager.CheckPasswordSignInAsync(user, password, lockoutOnFailure: true);
-        return result.Succeeded ? await CreateResponseAsync(user) : null;
+        var organizationExists = await context.Organizations
+            .AnyAsync(
+                organization => organization.Id == user.OrganizationId,
+                cancellationToken);
+
+        if (!organizationExists)
+            return null;
+
+        var result = await signInManager.CheckPasswordSignInAsync(
+            user,
+            password,
+            lockoutOnFailure: true);
+
+        return result.Succeeded ? CreateResponse(user) : null;
     }
 
-    private Task<AuthenticationResponse> CreateResponseAsync(AppUser user)
+    private AuthenticationResponse CreateResponse(AppUser user)
     {
-        var expiresAt = DateTimeOffset.UtcNow.AddMinutes(_jwtOptions.ExpirationInMinutes);
+        var expiresAt = DateTimeOffset.UtcNow
+            .AddMinutes(_jwtOptions.ExpirationInMinutes);
+
         var claims = new List<Claim>
         {
             new(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            new("store_id", user.StoreId.ToString())
+            new("organization_id", user.OrganizationId.ToString())
         };
 
         var credentials = new SigningCredentials(
@@ -96,7 +126,7 @@ public sealed class AuthenticationService(
             expires: expiresAt.UtcDateTime,
             signingCredentials: credentials);
 
-        return Task.FromResult(new AuthenticationResponse(
-            new JwtSecurityTokenHandler().WriteToken(token)));
+        return new AuthenticationResponse(
+            new JwtSecurityTokenHandler().WriteToken(token));
     }
 }

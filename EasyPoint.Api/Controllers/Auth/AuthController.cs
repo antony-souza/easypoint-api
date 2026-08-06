@@ -8,10 +8,10 @@ namespace EasyPoint.Api.Controllers.Auth;
 
 [ApiController]
 [Route("auth")]
-[AllowAnonymous]
 public sealed class AuthController(ISender sender) : ControllerBase
 {
     [HttpPost("register")]
+    //[Authorize]
     public async Task<IActionResult> Register(
         [FromBody] RegisterCommand registerCommand,
         CancellationToken cancellationToken)

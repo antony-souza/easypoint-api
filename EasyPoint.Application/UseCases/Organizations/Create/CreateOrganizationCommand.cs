@@ -1,6 +1,9 @@
-﻿namespace EasyPoint.Application.UseCases.Organizations.Create;
+﻿using EasyPoint.Application.Common.Results;
+using MediatR;
 
-public interface CreateOrganizationCommand
-{
-    
-}
+namespace EasyPoint.Application.UseCases.Organizations.Create;
+
+public sealed record CreateOrganizationCommand(
+    string Name,
+    string Cnpj
+) : IRequest<Result<CreateOrganizationResponse>>;

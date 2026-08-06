@@ -1,4 +1,4 @@
-﻿using FluentValidation;
+using FluentValidation;
 
 namespace EasyPoint.Application.UseCases.Auth.Register;
 
@@ -6,13 +6,20 @@ public sealed class RegisterCommandValidator : AbstractValidator<RegisterCommand
 {
     public RegisterCommandValidator()
     {
-        RuleFor(x => x.StoreId).NotEmpty();
-        RuleFor(x => x.Name).NotEmpty();
-        RuleFor(x => x.UserName).NotEmpty();
-        RuleFor(x => x.Email)
+        RuleFor(command => command.OrganizationId)
+            .NotEmpty();
+
+        RuleFor(command => command.Name)
+            .NotEmpty();
+
+        RuleFor(command => command.UserName)
+            .NotEmpty();
+
+        RuleFor(command => command.Email)
             .NotEmpty()
             .EmailAddress();
-        RuleFor(x => x.Password)
+
+        RuleFor(command => command.Password)
             .NotEmpty()
             .MinimumLength(6);
     }

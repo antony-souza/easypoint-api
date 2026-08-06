@@ -3,7 +3,7 @@ namespace EasyPoint.Application.Common.Authentication;
 public interface IAuthenticationService
 {
     Task<AuthenticationResponse> RegisterAsync(
-        Guid storeId,
+        Guid organizationId,
         string name,
         string userName,
         string email,

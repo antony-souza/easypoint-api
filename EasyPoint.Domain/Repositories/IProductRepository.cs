@@ -4,8 +4,8 @@ namespace EasyPoint.Domain.Repositories;
 
 public interface IProductRepository : IRepository<Product>
 {
-    Task<(IReadOnlyList<Product> Products, int TotalItems)> GetPagedByStoreAsync(
-        Guid storeId,
+    Task<(IReadOnlyList<Product> Products, int TotalItems)> GetPagedByOrganizationAsync(
+        Guid organizationId,
         int skip,
         int take,
         CancellationToken cancellationToken = default);

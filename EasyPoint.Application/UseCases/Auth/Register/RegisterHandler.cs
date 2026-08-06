@@ -6,7 +6,7 @@ using MediatR;
 namespace EasyPoint.Application.UseCases.Auth.Register;
 
 public sealed class RegisterHandler(
-    IStoreRepository storeRepository,
+    IOrganizationRepository organizationRepository,
     IAuthenticationService authenticationService)
     : IRequestHandler<RegisterCommand, Result<AuthenticationResponse>>
 {
@@ -14,15 +14,18 @@ public sealed class RegisterHandler(
         RegisterCommand request,
         CancellationToken cancellationToken)
     {
-        var store = await storeRepository.GetByIdAsync(request.StoreId, cancellationToken);
+        var organization = await organizationRepository.GetByIdAsync(
+            request.OrganizationId,
+            cancellationToken);
 
-        if (store is null)
-            return Result<AuthenticationResponse>.Failure("Store was not found.");
+        if (organization is null)
+            return Result<AuthenticationResponse>.Failure(
+                "Organization was not found.");
 
         try
         {
             var response = await authenticationService.RegisterAsync(
-                request.StoreId,
+                request.OrganizationId,
                 request.Name,
                 request.UserName,
                 request.Email,

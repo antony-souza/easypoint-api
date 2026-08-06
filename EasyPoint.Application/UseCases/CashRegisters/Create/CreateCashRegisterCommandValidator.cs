@@ -7,6 +7,9 @@ public sealed class CreateCashRegisterCommandValidator
 {
     public CreateCashRegisterCommandValidator()
     {
+        RuleFor(command => command.StoreId)
+            .NotEmpty();
+
         RuleFor(command => command.Name)
             .NotEmpty()
             .MaximumLength(100);

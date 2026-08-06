@@ -2,9 +2,11 @@ using EasyPoint.Domain.Common.Entities;
 using EasyPoint.Infrastructure.Identity;
 using EasyPoint.Domain.Entities.Categories;
 using EasyPoint.Domain.Entities.CashRegisters;
+using EasyPoint.Domain.Entities.Organizations;
 using EasyPoint.Domain.Entities.ProductPrices;
 using EasyPoint.Domain.Entities.Products;
 using EasyPoint.Domain.Entities.Stores;
+using EasyPoint.Domain.Entities.StoreUsers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +21,8 @@ public class EasyPointDbContext(DbContextOptions<EasyPointDbContext> options)
     public DbSet<Product> Products => Set<Product>();
     public DbSet<ProductPrice> ProductPrices => Set<ProductPrice>();
     public DbSet<CashRegister> CashRegisters => Set<CashRegister>();
+    public DbSet<Organization> Organizations => Set<Organization>();
+    public DbSet<StoreUser> StoreUsers => Set<StoreUser>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

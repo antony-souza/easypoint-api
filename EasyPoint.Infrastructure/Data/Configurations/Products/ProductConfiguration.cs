@@ -23,8 +23,6 @@ public sealed class ProductConfiguration : IEntityTypeConfiguration<Product>
             .IsRequired()
             .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-        builder.HasQueryFilter(product => product.DeletedAt == null);
-
         builder.Property(product => product.Name)
             .IsRequired()
             .HasMaxLength(150);
@@ -34,20 +32,35 @@ public sealed class ProductConfiguration : IEntityTypeConfiguration<Product>
             .HasMaxLength(50);
 
         builder.HasIndex(product => new
-            {
-                product.StoreId,
-                product.BarCode
-            })
-            .IsUnique();
+        {
+            product.OrganizationId,
+            product.BarCode
+        })
+        .IsUnique();
+
+        builder.HasOne(product => product.Organization)
+            .WithMany(organization => organization.Products)
+            .HasForeignKey(product => product.OrganizationId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(product => product.Category)
-            .WithMany()
-            .HasForeignKey(product => product.CategoryId)
+            .WithMany(category => category.Products)
+            .HasForeignKey(product => new
+            {
+                product.CategoryId,
+                product.OrganizationId
+            })
+            .HasPrincipalKey(category => new
+            {
+                category.Id,
+                category.OrganizationId
+            })
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasOne(product => product.Store)
-            .WithMany(store => store.Products)
-            .HasForeignKey(product => product.StoreId)
-            .OnDelete(DeleteBehavior.Restrict);
+        builder.HasQueryFilter(product =>
+            product.DeletedAt == null &&
+            product.Organization.DeletedAt == null &&
+            product.Category.DeletedAt == null &&
+            product.Category.Organization.DeletedAt == null);
     }
 }

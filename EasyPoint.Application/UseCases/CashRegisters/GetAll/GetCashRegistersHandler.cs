@@ -17,11 +17,19 @@ public sealed class GetCashRegistersHandler(
         GetCashRegistersQuery request,
         CancellationToken cancellationToken)
     {
+        if (!await currentUser.HasStoreAccessAsync(
+                request.StoreId,
+                cancellationToken))
+        {
+            return Result<PagedResponse<GetCashRegistersItemResponse>>.Failure(
+                "O usuário não está vinculado a esta loja.");
+        }
+
         var skip = (request.Page - 1) * request.PerPage;
 
         var (cashRegisters, totalItems) =
             await cashRegisterRepository.GetPagedByStoreAsync(
-                currentUser.StoreId,
+                request.StoreId,
                 skip,
                 request.PerPage,
                 cancellationToken);

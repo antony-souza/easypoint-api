@@ -15,10 +15,18 @@ public sealed class CreateCashRegisterHandler(
         CreateCashRegisterCommand request,
         CancellationToken cancellationToken)
     {
+        if (!await currentUser.HasStoreAccessAsync(
+                request.StoreId,
+                cancellationToken))
+        {
+            return Result<CreateCashRegisterResponse>.Failure(
+                "O usuário não está vinculado a esta loja.");
+        }
+
         var normalizedCode = request.Code.Trim().ToUpperInvariant();
 
         var existingCashRegister = await cashRegisterRepository.GetByCodeAsync(
-            currentUser.StoreId,
+            request.StoreId,
             normalizedCode,
             cancellationToken);
 
@@ -34,7 +42,7 @@ public sealed class CreateCashRegisterHandler(
             Name = request.Name.Trim(),
             Code = normalizedCode,
             IsActive = true,
-            StoreId = currentUser.StoreId
+            StoreId = request.StoreId
         };
 
         var createdCashRegister = await cashRegisterRepository.CreateAsync(
