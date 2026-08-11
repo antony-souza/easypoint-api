@@ -2,7 +2,7 @@
 using EasyPoint.Domain.Entities.Products;
 using EasyPoint.Domain.Entities.Stores;
 
-namespace EasyPoint.Domain.Entities.Stock;
+namespace EasyPoint.Domain.Entities.Stocks;
 
 public class Stock : Entity
 {
@@ -11,4 +11,6 @@ public class Stock : Entity
 
     public Guid ProductId { get; set; }
     public Product Product { get; set; } = null!;
+
+    public int Quantity { get; set; }
 }
