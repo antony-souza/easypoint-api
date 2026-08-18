@@ -1,4 +1,4 @@
-using EasyPoint.Infrastructure.Identity;
+using EasyPoint.Domain.Entities.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

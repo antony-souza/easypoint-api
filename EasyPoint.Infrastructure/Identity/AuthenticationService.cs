@@ -2,6 +2,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using EasyPoint.Application.Common.Authentication;
+using EasyPoint.Domain.Entities.Users;
 using EasyPoint.Infrastructure.Data.Context;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

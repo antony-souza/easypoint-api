@@ -1,5 +1,4 @@
 using EasyPoint.Domain.Entities.StoreUsers;
-using EasyPoint.Infrastructure.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -26,7 +25,7 @@ public sealed class StoreUserConfiguration : IEntityTypeConfiguration<StoreUser>
             .HasForeignKey(member => member.StoreId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.HasOne<AppUser>()
+        builder.HasOne(member => member.User)
             .WithMany(user => user.StoreUsers)
             .HasForeignKey(member => member.UserId)
             .OnDelete(DeleteBehavior.Cascade);

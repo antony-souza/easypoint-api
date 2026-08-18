@@ -1,5 +1,6 @@
 using System.Text;
 using EasyPoint.Application.Common.Authentication;
+using EasyPoint.Domain.Entities.Users;
 using EasyPoint.Domain.Repositories;
 using EasyPoint.Infrastructure.Data.Context;
 using EasyPoint.Infrastructure.Identity;

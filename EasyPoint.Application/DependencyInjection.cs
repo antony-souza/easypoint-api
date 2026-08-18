@@ -8,6 +8,7 @@ using EasyPoint.Application.UseCases.Products.Create;
 using EasyPoint.Application.UseCases.Products.GetAll;
 using EasyPoint.Application.UseCases.Stores.Create;
 using EasyPoint.Application.UseCases.StoreUsers.Create;
+using EasyPoint.Application.UseCases.StoreUsers.GetAll;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -35,6 +36,7 @@ public static class DependencyInjection
         services.AddScoped<IValidator<GetCashRegistersQuery>, GetCashRegistersQueryValidator>();
         services.AddScoped<IValidator<CreateStoreUserCommand>, CreateStoreUserCommandValidator>();
         services.AddScoped<IValidator<CreateOrganizationCommand>, CreateOrganizationCommandValidator>();
+        services.AddScoped<IValidator<GetAllStoreUsersQuery>, GetAllStoreUsersValidator>();
 
         return services;
     }

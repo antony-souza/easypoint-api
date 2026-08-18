@@ -1,7 +1,7 @@
 using EasyPoint.Domain.Common.Entities;
-using EasyPoint.Infrastructure.Identity;
 using EasyPoint.Domain.Entities.Categories;
 using EasyPoint.Domain.Entities.CashRegisters;
+using EasyPoint.Domain.Entities.CashSessions;
 using EasyPoint.Domain.Entities.Organizations;
 using EasyPoint.Domain.Entities.ProductPrices;
 using EasyPoint.Domain.Entities.Products;
@@ -9,6 +9,7 @@ using EasyPoint.Domain.Entities.StockMovements;
 using EasyPoint.Domain.Entities.Stocks;
 using EasyPoint.Domain.Entities.Stores;
 using EasyPoint.Domain.Entities.StoreUsers;
+using EasyPoint.Domain.Entities.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -27,6 +28,7 @@ public class EasyPointDbContext(DbContextOptions<EasyPointDbContext> options)
     public DbSet<StoreUser> StoreUsers => Set<StoreUser>();
     public DbSet<Stock> Stocks => Set<Stock>();
     public DbSet<StockMovement> StockMovements => Set<StockMovement>();
+    public DbSet<CashSession> CashSessions => Set<CashSession>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

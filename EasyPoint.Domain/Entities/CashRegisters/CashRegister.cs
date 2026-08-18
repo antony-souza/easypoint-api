@@ -1,4 +1,5 @@
 using EasyPoint.Domain.Common.Entities;
+using EasyPoint.Domain.Entities.CashSessions;
 using EasyPoint.Domain.Entities.Stores;
 
 namespace EasyPoint.Domain.Entities.CashRegisters;
@@ -10,4 +11,5 @@ public sealed class CashRegister : Entity
     public bool IsActive { get; set; } = true;
     public Guid StoreId { get; set; }
     public Store Store { get; set; } = null!;
+    public ICollection<CashSession> CashSessions { get; set; } = new List<CashSession>();
 }

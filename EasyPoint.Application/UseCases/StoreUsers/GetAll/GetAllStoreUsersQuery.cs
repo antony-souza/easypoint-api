@@ -1,3 +1,11 @@
-﻿namespace EasyPoint.Application.UseCases.StoreUsers.GetAll;
+﻿using EasyPoint.Application.Common.Pagination;
+using EasyPoint.Application.Common.Results;
+using MediatR;
 
-public sealed record GetAllStoreUsersCommand();
+namespace EasyPoint.Application.UseCases.StoreUsers.GetAll;
+
+public sealed record GetAllStoreUsersQuery(
+    Guid StoreId,
+    int Page = 1,
+    int PerPage = 10
+) : IRequest<Result<PagedResponse<GetAllStoreUsersResponse>>>;
