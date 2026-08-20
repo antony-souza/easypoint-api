@@ -1,3 +1,7 @@
 ﻿namespace EasyPoint.Application.UseCases.Users.Update;
 
-public record UpdateUsersResponse();
+public sealed record UpdateUsersResponse(
+    Guid Id,
+    string Name,
+    string Username,
+    string Email);

@@ -105,6 +105,49 @@ public sealed class AuthenticationService(
         return result.Succeeded ? CreateResponse(user) : null;
     }
 
+    public async Task<AppUser?> UpdateUserAsync(
+        Guid userId,
+        Guid organizationId,
+        string name,
+        string userName,
+        string email,
+        CancellationToken cancellationToken = default)
+    {
+        var user = await userManager.FindByIdAsync(userId.ToString());
+
+        if (user is null || user.OrganizationId != organizationId)
+            return null;
+
+        var normalizedUserName = userManager.NormalizeName(userName.Trim());
+        var normalizedEmail = userManager.NormalizeEmail(email.Trim());
+
+        var userNameAlreadyExists = await userManager.Users.AnyAsync(
+            item => item.Id != userId && item.NormalizedUserName == normalizedUserName,
+            cancellationToken);
+
+        if (userNameAlreadyExists)
+            throw new InvalidOperationException("Já existe um usuário com este nome de usuário.");
+
+        var emailAlreadyExists = await userManager.Users.AnyAsync(
+            item => item.Id != userId && item.NormalizedEmail == normalizedEmail,
+            cancellationToken);
+
+        if (emailAlreadyExists)
+            throw new InvalidOperationException("Já existe um usuário cadastrado com este e-mail.");
+
+        user.Name = name.Trim();
+        user.UserName = userName.Trim();
+        user.Email = email.Trim();
+
+        var result = await userManager.UpdateAsync(user);
+
+        if (!result.Succeeded)
+            throw new InvalidOperationException(
+                string.Join(" ", result.Errors.Select(error => error.Description)));
+
+        return user;
+    }
+
     private AuthenticationResponse CreateResponse(AppUser user)
     {
         var expiresAt = DateTimeOffset.UtcNow
